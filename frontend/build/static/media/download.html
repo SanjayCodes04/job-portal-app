@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Mera Pehla Vote, Desh ke Liye Pledge">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="https://pledge.mygov.in/mera-pehla-vote/assets/images/banner.jpg">
+  <meta property="og:title" content="Mera Pehla Vote, Desh ke Liye Pledge">
+  <meta property="og:description" content="" >
+  <meta property="og:image" content="https://pledge.mygov.in/mera-pehla-vote/assets/images/banner.jpg" >
+  <meta property="og:image:width" content="https://pledge.mygov.in/mera-pehla-vote/assets/images/banner.jpg" >
+  <title>Mera Pehla Vote, Desh ke Liye Pledge</title>
+  <link rel="stylesheet" href="../assets/css/jquery-ui.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+  <link rel="stylesheet" href="assets/css/soil.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/lobibox.css" type="text/css">
+  <link rel="stylesheet" href="../assets/css/c3.css" type="text/css">
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+        <script src="../assets/js/html5.js"></script>
+        <script src="../assets/js/respond.min.js"></script>
+    <![endif]-->
+  <!-- jQuery -->
+  <script  src="../assets/js/jquery.min.js"></script>
+  <script  src="../assets/js/jQuery.XDomainRequest.js"></script>
+  <script  src="../assets/js/lobibox.js"></script>
+  <script  src="../assets/js/notifications.js"></script>
+  <script  src="../assets/js/async.js"></script>
+  <script  src="../assets/js/handlebars.js"></script>
+  <script  src="../assets/js/typing.js"></script>
+  <script  src="../assets/js/countup.js"></script>
+  <script  src="../assets/js/md5.js"></script>
+
+  <script >
+    var debug_mode = false;
+    var cvc_data = {};
+    var cvc_services = {};
+  </script>
+  <script src="../assets/js/services.js" ></script>
+  <script src="../assets/js/cvc-render-services.js" ></script>
+
+</head>
+
+<body>
+  <!-- Page Header -->
+  <header class="header">
+    <div class="container">
+      <div class="header-content">
+        <div class="emblem"><a href="/" title="Mygov Pledge"><img class="desktop-logo" src="assets/images/mygov.png" alt="Mygov logo"> <img class="mobile-logo" src="../assets/images/langing-logo.png" alt="Mygov logo"></a></div>
+      </div>
+    </div>
+  </header>
+  <!-- Page Header End-->
+  <div  class="visilance-count">
+    <div class="container">
+      <div class="count-type">
+        <div class="count_item_wrapper"> <i class="indivisual"></i>
+          <div id="individual-pledges-count" class="count"></div> <span>नागरिक | Citizen </span>
+          <button class="btn analytics_btn">View Analytics</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-wrapper service-footer-wrapper">
+      <div class="container clearfix">
+
+
+
+        <div class="server-info"><span>Last Updated:</span> </div>
+      </div>
+
+    </div>
+    <div class="footer-main">
+      <div class="site-detail">
+        <a  title="NIC Logo" target="_blank" href="https://www.nic.in">
+          <img alt="NIC Logo" src="assets/images/nic-footer-logo.png">
+        </a>
+        <p>© Content owned, updated and maintained by the MyGov Cell. MyGov platform is designed, developed and hosted
+          by National Informatics Centre, Ministry of Electronics & Information Technology, Government of India.</p>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- Footer End -->
+  <script src="../assets/js/jquery-ui.js" ></script>
+  <script src="../assets/js/footerService.js" ></script>
+  <script src="../assets/js/custom.js" ></script>
+
+  <script  src="../assets/js/d3.js"></script>
+  <script  src="../assets/js/c3.js"></script>
+<script src="../assets/js/font-size.js" ></script>
+  <script src="../assets/js/swithcer.js" ></script>
+  <script >
+    var api_url = 'https://pledgeapi.mygov.in/' + 'api/v2/mera-pehla-vote/';
+    (function () {
+      // hold data here
+      var base_path = 'templates/';
+      var step_mapper = [
+        { 'url': 'landing.html' },
+        { 'url': 'citizen.html' },
+        { 'url': 'language.html' },
+        { 'url': 'pledge.html' },
+        { 'url': 'certificate.html' },
+        { 'url': 'email.html' },
+        { 'url': 'analytics.html' }
+      ];
+
+      var current_step = 0;
+
+      function renderSection(index) {
+        var step = step_mapper[index];
+        var url = base_path + step['url'];
+       
+        $.get(url, function (r_template) {
+          var template = Handlebars.compile(r_template);
+          var html = template(cvc_data);
+          $('div.content').remove();
+          $(html).insertAfter($('header'));
+        });
+      }
+
+      // handler for section rendering
+      $(window).on('renderSection', function (e, data) {
+        renderSection(data['step']);
+      });
+
+      // route controller here
+      $(function () {
+        var params = cvc_services['getAllUrlParams'].call();
+        if (params['type'] && params['type'] == 'mass-pledge') {
+          $(window).trigger('renderSection', { 'step': 6 });
+        } else if (params['type'] && params['type'] == 'mass-pledge-certificate') {
+          $(window).trigger('renderSection', { 'step': 8 });
+        } else {
+          $(window).trigger('renderSection', { 'step': 0 });
+        }
+
+      });
+
+
+    })();
+  </script>
+
+
+
+  <!-- Google Analytics -->
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-108917228-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    var $buoop = { vs: { i: 10 }, api: 4, reminder: 0, text: "Your browser (%s) is out of date. It has known security flaws and may not display all features of this and other websites. Please <a href='/help.html'>click here</a> for instruction to run this website on your browser.", url: "/help.html" };
+    function $buo_f() {
+      var e = document.createElement("script");
+      e.src = "//browser-update.org/update.min.js";
+      document.body.appendChild(e);
+    };
+    try { document.addEventListener("DOMContentLoaded", $buo_f, false) }
+    catch (e) { window.attachEvent("onload", $buo_f) }
+  </script>
+</body>
+
+</html>
